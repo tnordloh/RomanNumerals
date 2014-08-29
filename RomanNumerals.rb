@@ -10,18 +10,24 @@ class RomanNumerals
                         500 => "D", 900 => "CM",
                        1000 => "M"
                       }
+    @error = ""
   end
   def is_arabic? number
     my_number = number.to_i 
-    if my_number != 0 && (1..3999).include?(my_number)
-      return true 
+    if my_number == 0 
+      @error += "this isn't arabic.  roman?"
+      return false
     end
+    if  (1..3999).include?(my_number)
+      error = ""
+      return true
+    end
+    @error += "number not in range of 1 to 3999\n"
     return false
   end
-  def arabic_each roman_numeral
+  def roman_each roman_numeral
     working_number = roman_numeral.dup
     reversed_map = @arabic_roman_map.invert
-    #arabic_each working_number {|numeral| value += reversed_map[numeral]   }
     while working_number.size > 0
       if working_number.size >= 2 && reversed_map[working_number[-2,2]]
         yield reversed_map[working_number[-2,2]]
@@ -32,12 +38,13 @@ class RomanNumerals
       end
     end
   end
-  def is_roman? roman_number
+  def only_roman_digits? roman_number
     remainder= roman_number.dup
     @arabic_roman_map.each_value {|value|
       remainder.delete!(value)
     }
     if remainder.size > 0 
+      @error += "roman numeral #{roman_number}contains non-allowed values"
       return false 
     end
     return true
@@ -45,13 +52,30 @@ class RomanNumerals
   def roman_digits_in_order? roman_number
     map_reverse = @arabic_roman_map.invert
     last_value = 0
-    arabic_each(roman_number) {|numeral| 
+    roman_each(roman_number) {|numeral| 
       if last_value <= numeral
         last_value = numeral
       else
-       false 
+        @error += "small-value numeral precedes low-value number\n"
+        return false 
       end
     }
+    true
+  end
+  def all_roman_characters_less_than_three? character
+    list = @arabic_roman_map.values.select {|n| n.size==1}
+    list.each { |ch| 
+      if character.include?(ch * 4) 
+        @error += "there were four characters in a row\n"
+      end
+    }
+    return true
+  end
+  def is_roman? numeral
+    return false unless only_roman_digits?(numeral)
+    return false unless roman_digits_in_order?(numeral) 
+    return false unless all_roman_characters_less_than_three?(numeral) 
+    @error= ""
     true
   end
   def to_roman arabic_number
@@ -69,17 +93,13 @@ class RomanNumerals
   end
   def to_arabic roman_number
     return nil unless is_roman? roman_number
-    # roman_digits_in_order? arabic_number
-    value = 0
-    arabic_each(roman_number) {|numeral| value += numeral   }
+    value = 0 
+    roman_each(roman_number) {|numeral| value += numeral   } 
     return value
   end
   def convert value
     return to_arabic(value) if is_roman?(value)
     return  to_roman(value) if is_arabic?(value)
-    "the entry '#{value}' doesn't look roman or arabic.\n"+
-    "Please either enter a roman numeral " +
-    "(containing "  + @arabic_roman_map.values.join(',') + ")" +
-    "\nor an arabic number between 1 and 3999"
+    @error
   end
 end
