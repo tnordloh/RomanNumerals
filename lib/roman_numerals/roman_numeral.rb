@@ -94,9 +94,9 @@ class RomanNumerals
   end
   def to_arabic roman_number
     return nil unless is_roman? roman_number
-    value = 0 
-    roman_each(roman_number) {|numeral| value += numeral   } 
-    return value
+    value = []
+    roman_each(roman_number) {|numeral| value  << numeral   } 
+    value.inject(0) {|result,element|  result + element }
   end
   def convert value
     return to_arabic(value) if is_roman?(value)
