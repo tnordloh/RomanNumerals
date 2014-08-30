@@ -4,12 +4,12 @@ class RomanNumerals
   def initialize 
     @arabic_roman_map = { 1 => "I",   4 => "IV",
                           5 => "V",   9 => "IX",
-                         10 => "X",  40 => "XL",
-                         50 => "L",  90 => "XC",
-                        100 => "C", 400 => "CD",
-                        500 => "D", 900 => "CM",
-                       1000 => "M"
-                      }
+                          10 => "X",  40 => "XL",
+                          50 => "L",  90 => "XC",
+                          100 => "C", 400 => "CD",
+                          500 => "D", 900 => "CM",
+                          1000 => "M"
+    }
     @error = ""
   end
   def is_arabic? number
@@ -24,19 +24,6 @@ class RomanNumerals
     end
     @error += "number not in range of 1 to 3999\n"
     return false
-  end
-  def roman_each_2 roman_numeral
-    working_number = roman_numeral.dup
-    reversed_map = @arabic_roman_map.invert
-    while working_number.size > 0
-      if working_number.size >= 2 && reversed_map[working_number[-2,2]]
-        yield reversed_map[working_number[-2,2]]
-        working_number.chop!.chop!
-      elsif reversed_map[working_number[-1]]
-        yield reversed_map[working_number[-1]]
-        working_number.chop!
-      end
-    end
   end
   def roman_each roman_numeral
     working_number = roman_numeral.dup
@@ -87,9 +74,9 @@ class RomanNumerals
   end
   def is_roman? numeral
     return false if numeral.is_a?(Fixnum) || 
-                   ! only_roman_digits?(numeral) ||
-                   ! roman_digits_in_order?(numeral) ||
-                   ! all_roman_characters_less_than_three?(numeral) 
+      ! only_roman_digits?(numeral) ||
+      ! roman_digits_in_order?(numeral) ||
+      ! all_roman_characters_less_than_three?(numeral) 
     @error= ""
     true
   end
