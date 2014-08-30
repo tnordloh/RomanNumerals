@@ -25,6 +25,19 @@ class RomanNumerals
     @error += "number not in range of 1 to 3999\n"
     return false
   end
+  def roman_each_2 roman_numeral
+    working_number = roman_numeral.dup
+    reversed_map = @arabic_roman_map.invert
+    while working_number.size > 0
+      if working_number.size >= 2 && reversed_map[working_number[-2,2]]
+        yield reversed_map[working_number[-2,2]]
+        working_number.chop!.chop!
+      elsif reversed_map[working_number[-1]]
+        yield reversed_map[working_number[-1]]
+        working_number.chop!
+      end
+    end
+  end
   def roman_each roman_numeral
     working_number = roman_numeral.dup
     reversed_map = @arabic_roman_map.invert
@@ -39,12 +52,12 @@ class RomanNumerals
     end
   end
   def only_roman_digits? roman_number
-    remainder= roman_number.dup
+    remainder= roman_number.dup 
     @arabic_roman_map.each_value {|value|
       remainder.delete!(value)
     }
     if remainder.size > 0 
-      @error += "roman numeral #{roman_number}contains non-allowed values"
+      @error += "roman numeral #{roman_number} contains non-allowed values"
       return false 
     end
     return true
@@ -67,14 +80,16 @@ class RomanNumerals
     list.each { |ch| 
       if character.include?(ch * 4) 
         @error += "there were four characters in a row\n"
+        return false
       end
     }
     return true
   end
   def is_roman? numeral
-    return false unless only_roman_digits?(numeral)
-    return false unless roman_digits_in_order?(numeral) 
-    return false unless all_roman_characters_less_than_three?(numeral) 
+    return false if numeral.is_a?(Fixnum) || 
+                   ! only_roman_digits?(numeral) ||
+                   ! roman_digits_in_order?(numeral) ||
+                   ! all_roman_characters_less_than_three?(numeral) 
     @error= ""
     true
   end
@@ -85,7 +100,6 @@ class RomanNumerals
     while arabic_number > 0
       arabic_roman_map_cur = @arabic_roman_map.select {|k,v| k <= arabic_number}
       highest_value = arabic_roman_map_cur.keys.max
-      #puts "largest value is #{highest_value}"
       value += arabic_roman_map_cur[highest_value].to_s 
       arabic_number -= highest_value
     end
