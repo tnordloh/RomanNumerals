@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 
 require 'minitest/autorun'
-require_relative '../RomanNumerals'
+require_relative '../roman_numerals'
 
 class TestRomanNumerals < MiniTest::Unit::TestCase
   def setup
