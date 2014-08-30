@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 
-require_relative 'RomanNumerals'
+require_relative '../roman_numerals'
 
 
 rn =  RomanNumerals.new 
