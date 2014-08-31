@@ -63,11 +63,10 @@ class RomanNumerals
     #single method call, but I kind of like doing them all in one place, rather than 
   #making future me have to remember that I daisy chained the checks.
   def is_roman? numeral
-    return false if numeral.is_a?(Fixnum) || 
-      ! only_roman_digits?(numeral) ||
-      ! roman_digits_in_order?(numeral) ||
-      ! all_roman_characters_less_than_three?(numeral) 
-    true
+    (! numeral.is_a?(Fixnum) ) && 
+      only_roman_digits?(numeral) &&
+      roman_digits_in_order?(numeral) &&
+      all_roman_characters_less_than_three?(numeral) 
   end
   def to_roman arabic_number
     arabic_number = arabic_number.to_i
