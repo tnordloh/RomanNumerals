@@ -13,6 +13,7 @@ class RomanNumerals
     @roman_arabic_map = @arabic_roman_map.invert
   end
   def is_arabic? number
+    number = number.to_i
     return (1..3999).include?(number.to_i)
   end
   def roman_split roman_number
@@ -69,7 +70,6 @@ class RomanNumerals
     true
   end
   def to_roman arabic_number
-    arabic_number = arabic_number.to_i
     return nil unless is_arabic? arabic_number
     to_roman_private arabic_number
   end
@@ -83,9 +83,9 @@ class RomanNumerals
     return "invalid entry"
   end
 private
-#made this a private class, so that I can remove testing from it, and shrink the method down a bit
-#Now that it's private, I can increase the likelihood that the incoming value will be an arabic number
-#that won't generate any bugs
+#made this a private class, so that I can remove testing for a valid entry from it, and shrink 
+#the method down a bit. Now that it's private, I can increase the likelihood that the 
+#incoming value will be an arabic number that won't generate any bugs
   def to_roman_private arabic_number
     roman_return_string = ""
     while arabic_number > 0

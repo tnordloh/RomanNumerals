@@ -3,7 +3,7 @@
 require 'minitest/autorun'
 require_relative '../roman_numerals'
 
-class TestRomanNumerals < MiniTest::Unit::TestCase
+class TestRomanNumerals < MiniTest::Test
   def setup
     @rn = RomanNumerals.new
     @list = []
@@ -11,7 +11,7 @@ class TestRomanNumerals < MiniTest::Unit::TestCase
       line.chomp!
       num, val = line.split(' = ')
       @list[num.to_i] = val
-    }
+   }
   end
   def test_convert_to_roman
     (1...(@list.size)).each {|i|
