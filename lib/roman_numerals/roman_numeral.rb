@@ -52,14 +52,16 @@ class RomanNumerals
     true
   end
   def all_roman_characters_less_than_three? character
-#QUESTION:this line is doing like 8 things, but it's one line.
-#Is that ok?
     (@arabic_roman_map.values.select {|n| n.size==1}).each { |ch| 
                        return false if character.include?(ch * 4) }
     true
   end
-  def is_roman? numeral
 #QUESTION:three lines physically,, but spread out for readability.  Is that ok?
+    #another method would be to chain each of these checks, so that is_roman would cascade
+    #through the other check methods, rather than concentrating all the checks in a 
+    #single method call, but I kind of like doing them all in one place, rather than 
+  #making future me have to remember that I daisy chained the checks.
+  def is_roman? numeral
     return false if numeral.is_a?(Fixnum) || 
       ! only_roman_digits?(numeral) ||
       ! roman_digits_in_order?(numeral) ||
@@ -81,13 +83,16 @@ class RomanNumerals
     return "invalid entry"
   end
 private
+#made this a private class, so that I can remove testing from it, and shrink the method down a bit
+#Now that it's private, I can increase the likelihood that the incoming value will be an arabic number
+#that won't generate any bugs
   def to_roman_private arabic_number
-    value = ""
+    roman_return_string = ""
     while arabic_number > 0
       highest_value =  (@arabic_roman_map.select {|k,v| k <= arabic_number}).keys.max
-      value += @arabic_roman_map[highest_value]
+      roman_return_string += @arabic_roman_map[highest_value]
       arabic_number -= highest_value
     end
-    return value
+    return roman_return_string
   end
 end
