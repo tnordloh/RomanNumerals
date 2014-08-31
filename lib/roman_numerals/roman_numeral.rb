@@ -44,11 +44,8 @@ class RomanNumerals
   def roman_digits_in_order? roman_number
     last_value = 0
     roman_each(roman_number) {|numeral| 
-      if last_value <= numeral
-        last_value = numeral
-      else
-        return false 
-      end
+      return false if last_value > numeral 
+      last_value = numeral
     }
     true
   end
@@ -57,11 +54,6 @@ class RomanNumerals
                        return false if character.include?(ch * 4) }
     true
   end
-#QUESTION:three lines physically,, but spread out for readability.  Is that ok?
-    #another possibility would be to chain each of these checks, so that is_roman would cascade
-    #through the other check methods, rather than concentrating all the checks in a 
-    #single method call, but I kind of like doing them all in one place, rather than 
-  #making future me have to remember that I daisy chained the checks.
   def is_roman? numeral
     !numeral.is_a?(Fixnum) && 
       only_roman_digits?(numeral) &&
