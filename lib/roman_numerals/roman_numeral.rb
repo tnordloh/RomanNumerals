@@ -70,6 +70,7 @@ class RomanNumerals
     true
   end
   def to_roman arabic_number
+    arabic_number = arabic_number.to_i
     return nil unless is_arabic? arabic_number
     to_roman_private arabic_number
   end

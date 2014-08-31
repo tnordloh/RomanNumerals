@@ -26,7 +26,10 @@ class TestRomanNumerals < MiniTest::Test
 
   def test_convert_to_arabic
     (1...(@list.size)).each {|i|
-      assert_equal i, @rn.convert(@list[i]) 
+      #added the to_s below to deal with a case I was missing when 
+      #I tried to move String conversion out of the main to_arabic
+      #code."
+      assert_equal i, @rn.convert(@list[i].to_s) 
     }
   end
   def test_all_to_arabic_possibilities
