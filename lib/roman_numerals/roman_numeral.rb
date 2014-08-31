@@ -58,7 +58,7 @@ class RomanNumerals
     true
   end
 #QUESTION:three lines physically,, but spread out for readability.  Is that ok?
-    #another method would be to chain each of these checks, so that is_roman would cascade
+    #another possibility would be to chain each of these checks, so that is_roman would cascade
     #through the other check methods, rather than concentrating all the checks in a 
     #single method call, but I kind of like doing them all in one place, rather than 
   #making future me have to remember that I daisy chained the checks.
