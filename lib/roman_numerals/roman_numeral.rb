@@ -22,13 +22,18 @@ class RomanNumerals
   end
   def roman_each roman_numeral
     working_number = roman_numeral.dup
-    while working_number.size > 0
-      if working_number.size >= 2 && @roman_arabic_map[working_number[-2,2]]
-        yield @roman_arabic_map[working_number.slice!(-2,2)]
-      elsif @roman_arabic_map[working_number[-1]]
-        yield @roman_arabic_map[working_number.slice!(-1)]
-      end
+    while working_number.size > 0 do
+      yield roman_find_two_digit(working_number) || roman_find_one_digit(working_number)
     end
+  end
+  def roman_find_two_digit roman_numeral
+        return @roman_arabic_map[roman_numeral.slice!(-2,2)] if roman_numeral.size >= 2 && 
+                                                                @roman_arabic_map[roman_numeral[-2,2]]
+        return false
+  end
+  def roman_find_one_digit roman_numeral
+      return  @roman_arabic_map[roman_numeral.slice!(-1)] if @roman_arabic_map[roman_numeral[-1]]
+      return false
   end
   def only_roman_digits? roman_number
     remainder= roman_number.dup 
