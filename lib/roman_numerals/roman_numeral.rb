@@ -13,7 +13,6 @@ class RomanNumerals
     @roman_arabic_map = @arabic_roman_map.invert
   end
   def is_arabic? number
-    number = number.to_i
     return (1..3999).include?(number.to_i)
   end
   def roman_split roman_number
@@ -51,15 +50,13 @@ class RomanNumerals
                                  ! character.include?(ch * 4) }
   end
   def is_roman? numeral
-    !numeral.is_a?(Fixnum) && 
-      only_roman_digits?(numeral) &&
-      roman_digits_in_order?(numeral) &&
-      all_roman_characters_less_than_three?(numeral) 
+    !numeral.is_a?(Fixnum) && only_roman_digits?(numeral) &&
+                              roman_digits_in_order?(numeral) && 
+                              all_roman_characters_less_than_three?(numeral) 
   end
   def to_roman arabic_number
-    arabic_number = arabic_number.to_i
     return false unless is_arabic? arabic_number
-    to_roman_private arabic_number
+    to_roman_private arabic_number.to_i
   end
   def to_arabic roman_number
     return false unless is_roman? roman_number
@@ -68,10 +65,10 @@ class RomanNumerals
   def convert value
     to_roman(value) || to_arabic(value) || "invalid entry"
   end
-private
-#made this a private class, so that I can remove testing for a valid entry from it, and shrink 
-#the method down a bit. Now that it's private, I can increase the likelihood that the 
-#incoming value will be an arabic number that won't generate any bugs
+  private
+  #made this a private class, so that I can remove testing for a valid entry from it, and shrink 
+  #the method down a bit. Now that it's private, I can increase the likelihood that the 
+  #incoming value will be an arabic number that won't generate any bugs
   def to_roman_private arabic_number
     @arabic_roman_map.keys.sort.reverse.inject("") {|roman_return_string,key|
       multiplier,arabic_number = arabic_number.divmod(key)
