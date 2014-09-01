@@ -39,11 +39,11 @@ class TestRomanNumerals < MiniTest::Test
   end
 
   def test_that_non_arabic_numbers_return_nil
-    assert_equal nil, @rn.to_arabic("hello") 
+    assert_equal false, @rn.to_arabic("hello") 
   end
 
   def test_that_non_roman_numbers_return_nil
-    assert_equal nil, @rn.to_roman("hello") 
+    assert_equal false, @rn.to_roman("hello") 
   end
 
   def test_roman_less_than_three

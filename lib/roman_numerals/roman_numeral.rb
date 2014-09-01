@@ -24,8 +24,7 @@ class RomanNumerals
   def roman_each roman_numeral
     working_number = roman_numeral.dup
     while working_number.size > 0 do
-      yield roman_find_two_digit(working_number) || 
-            roman_find_one_digit(working_number)
+      yield roman_find_two_digit(working_number) || roman_find_one_digit(working_number)
     end
   end
   def roman_find_two_digit roman_numeral
@@ -48,8 +47,8 @@ class RomanNumerals
     roman_split(roman_number).each_cons(2).all? { |a| a[0] <= a[1] }
   end
   def all_roman_characters_less_than_three? character
-    (@arabic_roman_map.values.select {|n| n.size==1}).each.all?  { 
-                                 |ch| character.include?(ch * 4) }
+    (@arabic_roman_map.values.select {|n| n.size==1}).each.all?  { |ch| 
+                                 ! character.include?(ch * 4) }
   end
   def is_roman? numeral
     !numeral.is_a?(Fixnum) && 
@@ -59,29 +58,24 @@ class RomanNumerals
   end
   def to_roman arabic_number
     arabic_number = arabic_number.to_i
-    return nil unless is_arabic? arabic_number
+    return false unless is_arabic? arabic_number
     to_roman_private arabic_number
   end
   def to_arabic roman_number
-    return nil unless is_roman? roman_number
+    return false unless is_roman? roman_number
     roman_split(roman_number).inject(0) {|result,element|  result + element }
   end
   def convert value
-    return to_arabic(value) if is_roman?(value)
-    return to_roman(value) if is_arabic?(value)
-    return "invalid entry"
+    to_roman(value) || to_arabic(value) || "invalid entry"
   end
 private
 #made this a private class, so that I can remove testing for a valid entry from it, and shrink 
 #the method down a bit. Now that it's private, I can increase the likelihood that the 
 #incoming value will be an arabic number that won't generate any bugs
   def to_roman_private arabic_number
-    roman_return_string = ""
-    while arabic_number > 0
-      highest_value =  (@arabic_roman_map.select {|k,v| k <= arabic_number}).keys.max
-      roman_return_string += @arabic_roman_map[highest_value]
-      arabic_number -= highest_value
-    end
-    return roman_return_string
+    @arabic_roman_map.keys.sort.reverse.inject("") {|roman_return_string,key|
+      multiplier,arabic_number = arabic_number.divmod(key)
+      roman_return_string += @arabic_roman_map[key] * multiplier
+    }
   end
 end
